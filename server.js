@@ -8,6 +8,10 @@ const crypto = require("crypto")
 const Razorpay = require("razorpay")
 const path = require("path") // --- ADD THIS ---
 
+//import route factories 
+const authRoutesFactory = require("./routes/auth");
+const paymentRoutesFactory = require("./routes/payment");
+
 // Load environment variables
 dotenv.config()
 
@@ -17,9 +21,6 @@ const PORT = process.env.PORT || 5000
 // Middleware
 app.use(cors())
 app.use(express.json())
-
-// --- ADD THIS ---
-// Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')))
 
 // Neon PostgreSQL connection
@@ -488,25 +489,73 @@ app.use("/api/*", (req, res) => {
 
 // Start server
 async function startServer() {
-  await connectDB()
+  let db, razorpay;
 
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`)
-    console.log(`📍 Health check: http://localhost:${PORT}/api/health`)
-    console.log(`🐘 Database: Neon PostgreSQL`)
-    console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`)
-    console.log(`💳 Razorpay: ${razorpay ? "Configured" : "Not configured"}`)
-    console.log(`📋 Available endpoints:`)
-    console.log(`   POST /api/auth/signup`)
-    console.log(`   POST /api/auth/login`)
-    console.log(`   GET  /api/auth/me`)
-    console.log(`   POST /api/payments/create-order`)
-    console.log(`   POST /api/payments/verify`)
-    console.log(`   GET  /api/payments/history`)
-  })
+  try {
+    // 1. Connect to Neon Database
+    if (!process.env.DATABASE_URL) {
+      throw new Error("DATABASE_URL environment variable is not set.");
+    }
+    const sql = neon(process.env.DATABASE_URL);
+    // Create a db object with an execute method for queries
+    db = {
+      execute: (query, params) => sql(query, params),
+    };
+    // Test the connection
+    await db.execute(`SELECT NOW()`);
+    console.log("✅ Neon PostgreSQL connected successfully.");
+
+    // 2. Initialize Razorpay
+    if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+        throw new Error("Razorpay Key ID and Key Secret must be configured in .env");
+    }
+    razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
+    });
+    console.log("💳 Razorpay instance configured.");
+
+    // 3. Setup API Routes (Injecting dependencies like db and razorpay)
+    const authRoutes = authRoutesFactory(db);
+    const paymentRoutes = paymentRoutesFactory(db, razorpay);
+
+    app.use("/api/auth", authRoutes);
+    app.use("/api/payments", paymentRoutes);
+    
+    // --- Health Check Endpoint ---
+    app.get("/api/health", (req, res) => {
+        res.json({ status: "ok", timestamp: new Date() });
+    });
+
+    // --- Frontend Catch-all Route ---
+    // This route serves your index.html for any request that doesn't match an API route
+    // This is important for single-page applications.
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    });
+
+    // --- Error Handling Middleware ---
+    app.use((err, req, res, next) => {
+      console.error("Unhandled Error:", err);
+      res.status(500).json({
+        success: false,
+        message: "An internal server error occurred.",
+      });
+    });
+
+    // 5. Start Listening for Requests
+    app.listen(PORT, () => {
+      console.log(`🚀 Server is running on http://localhost:${PORT}`);
+    });
+
+  } catch (error) {
+    console.error("❌ Failed to start server:", error);
+    process.exit(1);
+  }
 }
 
-startServer()
+// --- Start the server ---
+startServer();
 
 // Export for use in other files
 module.exports = { sql }
