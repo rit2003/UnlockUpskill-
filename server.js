@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const crypto = require("crypto")
 const Razorpay = require("razorpay")
+const path = require("path") // --- ADD THIS ---
 
 // Load environment variables
 dotenv.config()
@@ -17,9 +18,14 @@ const PORT = process.env.PORT || 5000
 app.use(cors())
 app.use(express.json())
 
+// --- ADD THIS ---
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')))
+
 // Neon PostgreSQL connection
 let sql
 
+// ... (The rest of your connectDB, Razorpay, and other functions remain unchanged)
 async function connectDB() {
   try {
     console.log("🔍 Attempting to connect to Neon database...")
@@ -455,6 +461,13 @@ app.get("/api/payments/history", authenticateToken, async (req, res) => {
   }
 })
 
+// --- ADD THIS ---
+// This catch-all route should be AFTER all your API routes
+// It serves the frontend application for any route not handled by the API
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error("Unhandled error:", err)
@@ -465,11 +478,11 @@ app.use((err, req, res, next) => {
   })
 })
 
-// 404 handler
-app.use("*", (req, res) => {
+// 404 handler (This will now only catch API routes that are not found)
+app.use("/api/*", (req, res) => {
   res.status(404).json({
     success: false,
-    message: "Route not found",
+    message: "API route not found",
   })
 })
 
