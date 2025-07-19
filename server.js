@@ -14,61 +14,32 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 5000
 
-// Middleware
-app.use(cors())
-app.use(express.json())
-
-// Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, "public")))
-
-// Neon PostgreSQL connection
+// Initialize Neon PostgreSQL connection immediately
 let sql
+try {
+  if (!process.env.DATABASE_URL) {
+    throw new Error("DATABASE_URL environment variable is required for Neon connection")
+  }
+  sql = neon(process.env.DATABASE_URL)
+  console.log("✅ Neon client initialized.")
+} catch (error) {
+  console.error("❌ Failed to initialize Neon client:", error.message)
+  process.exit(1) // Exit if database connection string is missing or invalid
+}
 
-async function connectDB() {
+// Function to test DB connection (optional, but good for health check)
+async function testDBConnection() {
   try {
-    console.log("🔍 Attempting to connect to Neon database...")
-    console.log("Environment check:")
-    console.log("- NODE_ENV:", process.env.NODE_ENV)
-    console.log("- DATABASE_URL exists:", !!process.env.DATABASE_URL)
-
-    if (!process.env.DATABASE_URL) {
-      throw new Error("DATABASE_URL environment variable is required for Neon connection")
-    }
-
-    // Initialize Neon connection
-    sql = neon(process.env.DATABASE_URL)
-
-    // Test the connection
     console.log("🧪 Testing Neon database connection...")
     const result = await sql`SELECT NOW() as current_time, version() as pg_version`
-
     console.log("✅ Neon PostgreSQL connected successfully")
     console.log("📅 Database time:", result[0].current_time)
     console.log("🐘 PostgreSQL version:", result[0].pg_version.split(" ")[0])
     console.log("🚀 Neon serverless PostgreSQL ready!")
-
     return true
   } catch (error) {
-    console.error("❌ Neon database connection failed:")
-    console.error("Error details:", {
-      message: error.message,
-      code: error.code,
-    })
-
-    if (error.message.includes("DATABASE_URL")) {
-      console.error("💡 Please set your Neon DATABASE_URL in environment variables")
-      console.error("   Get it from: https://console.neon.tech → Your Project → Connection Details")
-    } else if (error.code === "ENOTFOUND") {
-      console.error("🔍 Network error - Check if:")
-      console.error("  1. Your Neon database URL is correct")
-      console.error("  2. Your internet connection is working")
-    } else {
-      console.error("🔧 Other possible issues:")
-      console.error("  1. Neon database might be sleeping (free tier)")
-      console.error("  2. Check your Neon project status")
-    }
-
-    process.exit(1)
+    console.error("❌ Neon database connection test failed:", error)
+    throw error // Re-throw to indicate failure
   }
 }
 
@@ -87,6 +58,13 @@ try {
 } catch (error) {
   console.error("❌ Razorpay initialization failed:", error.message)
 }
+
+// Middleware
+app.use(cors())
+app.use(express.json())
+
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, "public")))
 
 // Health check endpoint
 app.get("/api/health", async (req, res) => {
@@ -146,25 +124,29 @@ app.use("/api/*", (req, res) => {
 
 // Start server
 async function startServer() {
-  await connectDB()
-
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`)
-    console.log(`📍 Health check: http://localhost:${PORT}/api/health`)
-    console.log(`🐘 Database: Neon PostgreSQL`)
-    console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`)
-    console.log(`💳 Razorpay: ${razorpay ? "Configured" : "Not configured"}`)
-    console.log(`📋 Available endpoints:`)
-    console.log(`   POST /api/auth/signup`)
-    console.log(`   POST /api/auth/login`)
-    console.log(`   GET  /api/auth/me`)
-    console.log(`   POST /api/payments/create-order`)
-    console.log(`   POST /api/payments/verify`)
-    console.log(`   GET  /api/payments/history`)
-  })
+  try {
+    await testDBConnection() // Test connection before starting server
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`)
+      console.log(`📍 Health check: http://localhost:${PORT}/api/health`)
+      console.log(`🐘 Database: Neon PostgreSQL`)
+      console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`)
+      console.log(`💳 Razorpay: ${razorpay ? "Configured" : "Not configured"}`)
+      console.log(`📋 Available endpoints:`)
+      console.log(`   POST /api/auth/signup`)
+      console.log(`   POST /api/auth/login`)
+      console.log(`   GET  /api/auth/me`)
+      console.log(`   POST /api/payments/create-order`)
+      console.log(`   POST /api/payments/verify`)
+      console.log(`   GET  /api/payments/history`)
+    })
+  } catch (error) {
+    console.error("Failed to start server due to database connection issues:", error)
+    process.exit(1) // Exit if DB connection fails at startup
+  }
 }
 
 startServer()
 
 // Export for use in other files
-module.exports = { sql, razorpay } // Export razorpay as well
+module.exports = { sql, razorpay } // Export sql and razorpay
