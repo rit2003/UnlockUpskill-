@@ -8,13 +8,11 @@ const crypto = require("crypto")
 const Razorpay = require("razorpay")
 const path = require("path")
 
-// Load environment variables
+// Load environment variables first and synchronously
 dotenv.config()
 
-const app = express()
-const PORT = process.env.PORT || 5000
-
-// Initialize Neon PostgreSQL connection immediately
+// Initialize Neon PostgreSQL connection immediately and synchronously
+// This ensures 'sql' is a function when other modules require it
 let sql
 try {
   if (!process.env.DATABASE_URL) {
@@ -24,8 +22,28 @@ try {
   console.log("✅ Neon client initialized.")
 } catch (error) {
   console.error("❌ Failed to initialize Neon client:", error.message)
-  process.exit(1) // Exit if database connection string is missing or invalid
+  // It's critical to have a database connection, so exit if it fails here
+  process.exit(1)
 }
+
+// Initialize Razorpay immediately and synchronously
+let razorpayInstance
+try {
+  if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+    razorpayInstance = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
+    })
+    console.log("✅ Razorpay initialized successfully")
+  } else {
+    console.log("⚠️ Razorpay credentials not found - payment features will be disabled")
+  }
+} catch (error) {
+  console.error("❌ Razorpay initialization failed:", error.message)
+}
+
+const app = express()
+const PORT = process.env.PORT || 5000
 
 // Function to test DB connection (optional, but good for health check)
 async function testDBConnection() {
@@ -41,22 +59,6 @@ async function testDBConnection() {
     console.error("❌ Neon database connection test failed:", error)
     throw error // Re-throw to indicate failure
   }
-}
-
-// Initialize Razorpay
-let razorpay
-try {
-  if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
-    razorpay = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID,
-      key_secret: process.env.RAZORPAY_KEY_SECRET,
-    })
-    console.log("✅ Razorpay initialized successfully")
-  } else {
-    console.log("⚠️ Razorpay credentials not found - payment features will be disabled")
-  }
-} catch (error) {
-  console.error("❌ Razorpay initialization failed:", error.message)
 }
 
 // Middleware
@@ -78,7 +80,7 @@ app.get("/api/health", async (req, res) => {
       timestamp: new Date().toISOString(),
       db_time: result[0].current_time,
       environment: process.env.NODE_ENV || "development",
-      razorpay_configured: !!razorpay,
+      razorpay_configured: !!razorpayInstance,
     })
   } catch (error) {
     console.error("Health check failed:", error)
@@ -131,7 +133,7 @@ async function startServer() {
       console.log(`📍 Health check: http://localhost:${PORT}/api/health`)
       console.log(`🐘 Database: Neon PostgreSQL`)
       console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`)
-      console.log(`💳 Razorpay: ${razorpay ? "Configured" : "Not configured"}`)
+      console.log(`💳 Razorpay: ${razorpayInstance ? "Configured" : "Not configured"}`)
       console.log(`📋 Available endpoints:`)
       console.log(`   POST /api/auth/signup`)
       console.log(`   POST /api/auth/login`)
@@ -149,4 +151,5 @@ async function startServer() {
 startServer()
 
 // Export for use in other files
-module.exports = { sql, razorpay } // Export sql and razorpay
+// Ensure sql and razorpayInstance are exported after they are fully initialized
+module.exports = { sql, razorpay: razorpayInstance }
