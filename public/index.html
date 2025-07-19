@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unlock UpSkill - Get Premium Courses for Less</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <link rel="icon" type="image/png" href="../../favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -12,20 +13,17 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #87CEEB 0%, #32CD32 100%);
             min-height: 100vh;
             color: #333;
         }
-
         .container {
             max-width: 100%;
             margin: 0 auto;
             padding: 20px;
         }
-
         .header {
             text-align: center;
             margin-bottom: 30px;
@@ -34,7 +32,6 @@
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-
         .logo {
             font-size: 2.5em;
             font-weight: 700;
@@ -44,13 +41,11 @@
             background-clip: text;
             margin-bottom: 10px;
         }
-
         .tagline {
             font-size: 1.1em;
             color: #666;
             font-weight: 400;
         }
-
         .course-card {
             background: white;
             border-radius: 25px;
@@ -60,7 +55,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .course-card::before {
             content: '';
             position: absolute;
@@ -70,7 +64,6 @@
             height: 5px;
             background: linear-gradient(90deg, #87CEEB, #32CD32);
         }
-
         .course-title {
             font-size: 1.8em;
             font-weight: 600;
@@ -78,14 +71,12 @@
             margin-bottom: 15px;
             line-height: 1.3;
         }
-
         .course-description {
             font-size: 1em;
             color: #666;
             line-height: 1.6;
             margin-bottom: 25px;
         }
-
         .registration-description {
             font-size: 1em;
             color: #666;
@@ -95,7 +86,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .price-section {
             display: flex;
             align-items: center;
@@ -105,19 +95,16 @@
             background: #f8f9fa;
             border-radius: 15px;
         }
-
         .original-price {
             font-size: 1.2em;
             text-decoration: line-through;
             color: #999;
         }
-
         .discounted-price {
             font-size: 1.8em;
             font-weight: 700;
             color: #32CD32;
         }
-
         .discount-badge {
             background: linear-gradient(45deg, #32CD32, #87CEEB);
             color: white;
@@ -126,7 +113,6 @@
             font-size: 0.9em;
             font-weight: 600;
         }
-
         .enroll-btn {
             width: 100%;
             padding: 18px;
@@ -140,12 +126,10 @@
             transition: all 0.3s ease;
             box-shadow: 0 8px 20px rgba(135, 206, 235, 0.3);
         }
-
         .enroll-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 30px rgba(135, 206, 235, 0.4);
         }
-
         .auth-modal {
             display: none;
             position: fixed;
@@ -159,7 +143,6 @@
             justify-content: center;
             padding: 20px;
         }
-
         .auth-container {
             background: white;
             border-radius: 25px;
@@ -168,7 +151,6 @@
             width: 100%;
             position: relative;
         }
-
         .close-btn {
             position: absolute;
             top: 15px;
@@ -179,7 +161,6 @@
             cursor: pointer;
             color: #999;
         }
-
         .auth-title {
             font-size: 1.8em;
             font-weight: 600;
@@ -187,18 +168,15 @@
             margin-bottom: 30px;
             color: #333;
         }
-
         .form-group {
             margin-bottom: 20px;
         }
-
         .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
             color: #555;
         }
-
         .form-group input {
             width: 100%;
             padding: 15px;
@@ -207,7 +185,6 @@
             font-size: 1em;
             transition: border-color 0.3s ease;
         }
-
         .form-group input:focus {
             outline: none;
             border-color: #87CEEB;
@@ -220,7 +197,6 @@
         .password-container {
             position: relative;
         }
-
         .password-toggle {
             position: absolute;
             right: 15px;
@@ -231,7 +207,6 @@
             cursor: pointer;
             color: #666;
         }
-
         .auth-btn {
             width: 100%;
             padding: 15px;
@@ -244,18 +219,19 @@
             cursor: pointer;
             margin-bottom: 20px;
         }
-
+        .auth-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
         .auth-switch {
             text-align: center;
             color: #666;
         }
-
         .auth-switch a {
             color: #87CEEB;
             text-decoration: none;
             font-weight: 500;
         }
-
         .payment-section {
             background: white;
             border-radius: 25px;
@@ -263,7 +239,6 @@
             margin-bottom: 30px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.1);
         }
-
         .payment-title {
             font-size: 1.6em;
             font-weight: 600;
@@ -271,20 +246,17 @@
             margin-bottom: 20px;
             color: #333;
         }
-
         .payment-details {
             background: #f8f9fa;
             padding: 20px;
             border-radius: 15px;
             margin-bottom: 30px;
         }
-
         .payment-row {
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
         }
-
         .payment-row.total {
             font-weight: 600;
             font-size: 1.2em;
@@ -292,7 +264,6 @@
             border-top: 2px solid #e0e0e0;
             padding-top: 10px;
         }
-
         .payment-btn {
             width: 100%;
             padding: 18px;
@@ -304,6 +275,10 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+        }
+        .payment-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
         .ad-overlay {
             display: none;
@@ -353,12 +328,10 @@
             opacity: 0.5;
             pointer-events: none;
         }
-
         .skip-btn.active {
             opacity: 1;
             pointer-events: all;
         }
-
         .coupon-section {
             background: white;
             border-radius: 25px;
@@ -367,13 +340,11 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.1);
             text-align: center;
         }
-
         .success-icon {
             font-size: 3em;
             color: #32CD32;
             margin-bottom: 20px;
         }
-
         .coupon-code {
             background: #f8f9fa;
             padding: 20px;
@@ -381,14 +352,12 @@
             margin: 20px 0;
             border: 2px dashed #87CEEB;
         }
-
         .coupon-text {
             font-size: 1.8em;
             font-weight: 700;
             color: #333;
             letter-spacing: 2px;
         }
-
         .copy-btn {
             background: linear-gradient(45deg, #87CEEB, #32CD32);
             color: white;
@@ -401,7 +370,6 @@
             margin: 20px 0;
             transition: all 0.3s ease;
         }
-
         .redirect-btn {
             background: linear-gradient(45deg, #32CD32, #87CEEB);
             color: white;
@@ -413,7 +381,6 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
         .success-popup {
             display: none;
             position: fixed;
@@ -426,7 +393,6 @@
             align-items: center;
             justify-content: center;
         }
-
         .success-content {
             background: white;
             border-radius: 25px;
@@ -435,28 +401,27 @@
             max-width: 350px;
             width: 90%;
         }
-
         .hidden {
             display: none !important;
         }
-
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
         @media (max-width: 480px) {
             .container {
                 padding: 15px;
             }
-
             .logo {
                 font-size: 2em;
             }
-
             .course-card {
                 padding: 20px;
             }
-
             .course-title {
                 font-size: 1.5em;
             }
-
             .auth-container {
                 padding: 30px 20px;
             }
@@ -483,14 +448,12 @@
                 </div>
                 <div class="discount-badge">97% OFF</div>
             </div>
-
             <p class="registration-description">
                 To enroll in course register yourself here!
             </p>
             <button class="enroll-btn" onclick="showAuthModal()">
                 🚀 Enroll Now - Get Instant Access
             </button>
-
         </div>
 
         <div class="payment-section hidden" id="paymentSection">
@@ -509,7 +472,7 @@
                     <span>₹100</span>
                 </div>
             </div>
-            <button class="payment-btn" onclick="processPayment()">
+            <button class="payment-btn" onclick="processPayment()" id="paymentButton">
                 💳 Pay ₹100 & Get Course Access
             </button>
         </div>
@@ -543,6 +506,7 @@
                     <div class="form-group">
                         <label>Email</label>
                         <input type="email" id="loginEmail" required>
+                        <div class="error-message" id="loginEmailError"></div>
                     </div>
                     <div class="form-group">
                         <label>Password</label>
@@ -550,8 +514,9 @@
                             <input type="password" id="loginPassword" required>
                             <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">👁</button>
                         </div>
+                        <div class="error-message" id="loginPasswordError"></div>
                     </div>
-                    <button type="submit" class="auth-btn">Login</button>
+                    <button type="submit" class="auth-btn" id="loginBtn">Login</button>
                 </form>
                 <div class="auth-switch">
                     Don't have an account? <a href="#" onclick="showSignup()">Sign up</a>
@@ -564,20 +529,23 @@
                     <div class="form-group">
                         <label>Full Name</label>
                         <input type="text" id="signupName" required>
+                        <div class="error-message" id="signupNameError"></div>
                     </div>
                     <div class="form-group">
                         <label>Email</label>
                         <input type="email" id="signupEmail" required>
+                        <div class="error-message" id="signupEmailError"></div>
                     </div>
                     <div class="form-group">
                         <label>Password</label>
                         <div class="password-container">
                             <input type="password" id="signupPassword" required minlength="8" onkeyup="validatePassword()">
-                            <button type="button" class="password-toggle" onclick="togglePassword('signupPassword')"></button>
+                            <button type="button" class="password-toggle" onclick="togglePassword('signupPassword')">👁</button>
                         </div>
                         <p class="password-warning" id="passwordWarning"></p>
+                        <div class="error-message" id="signupPasswordError"></div>
                     </div>
-                    <button type="submit" class="auth-btn">Create Account</button>
+                    <button type="submit" class="auth-btn" id="signupBtn">Create Account</button>
                 </form>
                 <div class="auth-switch">
                     Already have an account? <a href="#" onclick="showLogin()">Login</a>
@@ -595,6 +563,7 @@
             </div>
         </div>
     </div>
+
     <div class="ad-overlay" id="postPaymentAdOverlay">
         <div class="ad-container">
             <div class="ad-timer" id="postPaymentAdTimer">20</div>
@@ -605,146 +574,164 @@
         </div>
     </div>
 
-
     <div class="success-popup" id="successPopup">
         <div class="success-content" id="successPopupContent">
-            </div>
+        </div>
     </div>
 
     <script>
-        // --- DATA STORE --- //
-        
-        // --- UPDATED --- Load users from localStorage or initialize an empty array
-        let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
-        
-        let currentUser = {
-            name: '',
-            email: '',
-            isLoggedIn: false
-        };
+    // --- CONFIG & DATA STORE --- //
+    const API_URL = ''; // An empty string makes requests to the same origin
+    const RAZORPAY_KEY_ID = 'rzp_test_sQfFwZyFkXzVvY'; // Replace with your actual PUBLIC Razorpay Key ID
 
-        // Course data
-        const courseData = {
-            title: "Complete Web Development Bootcamp",
-            description: "Master HTML, CSS, JavaScript, React, Node.js, and MongoDB...",
-            couponCode: "UPSKILL50",
-            redirectUrl: "https://www.udemy.com/course/the-complete-web-development-bootcamp/"
-        };
-        // --- INITIALIZATION --- //
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('initialAdOverlay').style.display = 'flex';
-        });
+    let state = {
+        token: localStorage.getItem('token') || null,
+        user: null,
+        razorpayOrderId: null,
+    };
 
+    // Course data
+    const courseData = {
+        title: "Complete Web Development Bootcamp",
+        description: "Master HTML, CSS, JavaScript, React, Node.js, and MongoDB...",
+        couponCode: "UPSKILL50",
+        redirectUrl: "https://www.udemy.com/course/the-complete-web-development-bootcamp/",
+        amount: 100 // Total amount in INR
+    };
 
-        // --- ADVERTISEMENT LOGIC --- //
-        function closeInitialAd() {
-            document.getElementById('initialAdOverlay').style.display = 'none';
+    // --- INITIALIZATION --- //
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('initialAdOverlay').style.display = 'flex';
+        if (state.token) {
+            // If user has a token, you might want to verify it or directly show the payment section
+            // For simplicity, we'll just keep them "logged in" on the frontend
+            console.log("User has a token, ready to proceed.");
         }
+    });
 
-        function showPostPaymentAd() {
-            document.getElementById('postPaymentAdOverlay').style.display = 'flex';
-            let timeLeft = 20;
-            const timerEl = document.getElementById('postPaymentAdTimer');
+    // --- ADVERTISEMENT LOGIC --- //
+    function closeInitialAd() {
+        document.getElementById('initialAdOverlay').style.display = 'none';
+    }
+
+    function showPostPaymentAd() {
+        document.getElementById('postPaymentAdOverlay').style.display = 'flex';
+        let timeLeft = 20;
+        const timerEl = document.getElementById('postPaymentAdTimer');
+        timerEl.textContent = timeLeft;
+
+        const timer = setInterval(() => {
+            timeLeft--;
             timerEl.textContent = timeLeft;
-
-            const timer = setInterval(() => {
-                timeLeft--;
-                timerEl.textContent = timeLeft;
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    document.getElementById('postPaymentAdOverlay').style.display = 'none';
-                    showCouponSection();
-                }
-            }, 1000);
-        }
-
-
-        // --- AUTHENTICATION & USER FLOW --- //
-        function showAuthModal() {
-            document.getElementById('authModal').style.display = 'flex';
-        }
-
-        function hideAuthModal() {
-            document.getElementById('authModal').style.display = 'none';
-        }
-
-        function showLogin() {
-            document.getElementById('loginForm').classList.remove('hidden');
-            document.getElementById('signupForm').classList.add('hidden');
-        }
-
-        function showSignup() {
-            document.getElementById('signupForm').classList.remove('hidden');
-            document.getElementById('loginForm').classList.add('hidden');
-        }
-
-        function togglePassword(inputId) {
-            const input = document.getElementById(inputId);
-            const button = input.nextElementSibling;
-            input.type = input.type === 'password' ? 'text' : 'password';
-            button.textContent = input.type === 'password' ? '👁' : '🙈';
-        }
-
-        function validatePassword() {
-            const password = document.getElementById('signupPassword').value;
-            const warning = document.getElementById('passwordWarning');
-            warning.textContent = password.length < 8 ? 'Password must be at least 8 characters.' : '';
-        }
-
-        // --- COMPLETELY REVISED LOGIN FUNCTION --- //
-        function handleLogin(event) {
-            event.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-
-            const userByEmail = registeredUsers.find(u => u.email === email);
-
-            if (!userByEmail) {
-                // Case 1: User is not registered. Show popup and redirect to signup form.
-                showSuccessPopup('Login Failed', 'This email is not registered. Please sign up.');
-                setTimeout(() => {
-                    showSignup();
-                }, 2200); // Wait for popup to be seen before switching forms.
-            } else if (userByEmail.password !== password) {
-                // Case 2: User exists, but password is wrong.
-                showSuccessPopup('Login Failed', 'Incorrect password. Please try again.');
-            } else {
-                // Case 3: Login successful.
-                currentUser = { ...userByEmail, isLoggedIn: true };
-                hideAuthModal();
-                showSuccessPopup('Login Successful!', 'Redirecting to payment...');
-                setTimeout(() => {
-                    hideSuccessPopup();
-                    showPaymentSection();
-                }, 2000);
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                document.getElementById('postPaymentAdOverlay').style.display = 'none';
+                showCouponSection();
             }
-        }
+        }, 1000);
+    }
 
-        // --- UPDATED SIGNUP FUNCTION --- //
-        function handleSignup(event) {
-            event.preventDefault();
-            const name = document.getElementById('signupName').value;
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
+    // --- AUTHENTICATION & USER FLOW --- //
+    function showAuthModal() {
+        document.getElementById('authModal').style.display = 'flex';
+    }
 
-            if (password.length < 8) {
-                validatePassword();
-                return;
+    function hideAuthModal() {
+        document.getElementById('authModal').style.display = 'none';
+    }
+
+    function showLogin() {
+        document.getElementById('loginForm').classList.remove('hidden');
+        document.getElementById('signupForm').classList.add('hidden');
+    }
+
+    function showSignup() {
+        document.getElementById('signupForm').classList.remove('hidden');
+        document.getElementById('loginForm').classList.add('hidden');
+    }
+
+    function togglePassword(inputId) {
+        const input = document.getElementById(inputId);
+        const button = input.nextElementSibling;
+        input.type = input.type === 'password' ? 'text' : 'password';
+        button.textContent = input.type === 'password' ? '👁' : '🙈';
+    }
+
+    function validatePassword() {
+        const password = document.getElementById('signupPassword').value;
+        const warning = document.getElementById('passwordWarning');
+        warning.textContent = password.length < 8 ? 'Password must be at least 8 characters.' : '';
+    }
+
+    // --- REVISED LOGIN FUNCTION (with fetch) --- //
+    async function handleLogin(event) {
+        event.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+
+        showSuccessPopup('Logging In...', '', false);
+
+        try {
+            const response = await fetch(`${API_URL}/api/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Login failed.');
             }
 
-            // Check if user already exists
-            if (registeredUsers.some(user => user.email === email)) {
-                showSuccessPopup('Registration Failed', 'This email is already registered. Please log in.');
-                showLogin();
-                return;
+            // Success
+            state.token = result.data.token;
+            state.user = result.data.user;
+            localStorage.setItem('token', state.token);
+
+            hideAuthModal();
+            showSuccessPopup('Login Successful!', 'Redirecting to payment...');
+            setTimeout(() => {
+                hideSuccessPopup();
+                showPaymentSection();
+            }, 2000);
+
+        } catch (error) {
+            showSuccessPopup('Login Failed', error.message);
+        }
+    }
+
+    // --- REVISED SIGNUP FUNCTION (with fetch) --- //
+    async function handleSignup(event) {
+        event.preventDefault();
+        const name = document.getElementById('signupName').value;
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
+
+        if (password.length < 8) {
+            validatePassword();
+            return;
+        }
+
+        showSuccessPopup('Creating Account...', '', false);
+
+        try {
+            const response = await fetch(`${API_URL}/api/auth/signup`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Signup failed.');
             }
 
-            const newUser = { name, email, password };
-            registeredUsers.push(newUser);
-            // --- UPDATED --- Save the new user list to localStorage for persistence
-            localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-
-            currentUser = { ...newUser, isLoggedIn: true };
+            // Success
+            state.token = result.data.token;
+            state.user = result.data.user;
+            localStorage.setItem('token', state.token);
 
             hideAuthModal();
             showSuccessPopup('Signup Successful!', 'Redirecting to payment...');
@@ -752,83 +739,167 @@
                 hideSuccessPopup();
                 showPaymentSection();
             }, 2000);
+
+        } catch (error) {
+            showSuccessPopup('Registration Failed', error.message);
+        }
+    }
+
+
+    // --- PAYMENT & COUPON FLOW --- //
+    function showPaymentSection() {
+        document.getElementById('courseSection').classList.add('hidden');
+        document.getElementById('paymentSection').classList.remove('hidden');
+    }
+
+    async function processPayment() {
+        if (!state.token) {
+            showSuccessPopup('Error', 'You must be logged in to pay.');
+            showAuthModal();
+            return;
         }
 
-        // --- PAYMENT & COUPON FLOW --- //
+        showSuccessPopup('Creating Order...', '', false);
 
-        function showPaymentSection() {
-            document.getElementById('courseSection').classList.add('hidden');
-            document.getElementById('paymentSection').classList.remove('hidden');
-        }
-
-        function processPayment() {
-            // Simulate payment processing
-            showSuccessPopup('Processing Payment...', '', false);
-            setTimeout(() => {
-                hideSuccessPopup();
-                showPostPaymentAd();
-            }, 1500);
-        }
-
-        function showCouponSection() {
-            document.getElementById('paymentSection').classList.add('hidden');
-            document.getElementById('couponSection').classList.remove('hidden');
-        }
-
-        function copyCoupon() {
-            const couponCode = courseData.couponCode;
-            navigator.clipboard.writeText(couponCode).then(() => {
-                const btn = event.target;
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '✅ Copied!';
-                btn.style.background = '#32CD32';
-
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.style.background = 'linear-gradient(45deg, #87CEEB, #32CD32)';
-                }, 2000);
+        try {
+            // 1. Create an order on your backend
+            const orderResponse = await fetch(`${API_URL}/api/payments/create-order`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${state.token}`
+                },
+                body: JSON.stringify({ amount: courseData.amount })
             });
-        }
 
-        function redirectToCourse() {
-            navigator.clipboard.writeText(courseData.couponCode);
-            showSuccessPopup('Redirecting...', 'Applying your coupon code on Udemy.');
+            const orderResult = await orderResponse.json();
+
+            if (!orderResponse.ok) {
+                throw new Error(orderResult.message || 'Failed to create order.');
+            }
+            
+            state.razorpayOrderId = orderResult.data.order.id;
+            hideSuccessPopup();
+
+            // 2. Open Razorpay Checkout
+            const options = {
+                key: RAZORPAY_KEY_ID,
+                amount: orderResult.data.order.amount,
+                currency: "INR",
+                name: "Unlock UpSkill",
+                description: "Course Enrollment",
+                order_id: state.razorpayOrderId,
+                handler: async function (response) {
+                    // 3. Verify the payment on your backend
+                    await verifyPayment(response);
+                },
+                prefill: {
+                    name: state.user.name,
+                    email: state.user.email,
+                },
+                theme: {
+                    color: "#32CD32"
+                }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.open();
+
+        } catch (error) {
+            showSuccessPopup('Payment Error', error.message);
+        }
+    }
+
+    async function verifyPayment(paymentResponse) {
+        showSuccessPopup('Verifying Payment...', '', false);
+        try {
+            const response = await fetch(`${API_URL}/api/payments/verify`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${state.token}`
+                },
+                body: JSON.stringify({
+                    razorpay_order_id: paymentResponse.razorpay_order_id,
+                    razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                    razorpay_signature: paymentResponse.razorpay_signature
+                })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Verification failed.');
+            }
+
+            // Success
+            hideSuccessPopup();
+            showPostPaymentAd();
+
+        } catch (error) {
+            showSuccessPopup('Verification Failed', error.message);
+        }
+    }
+
+
+    function showCouponSection() {
+        document.getElementById('paymentSection').classList.add('hidden');
+        document.getElementById('couponSection').classList.remove('hidden');
+    }
+
+    function copyCoupon() {
+        navigator.clipboard.writeText(courseData.couponCode).then(() => {
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '✅ Copied!';
+            btn.style.background = '#32CD32';
+
             setTimeout(() => {
-                window.open(courseData.redirectUrl, '_blank');
-                hideSuccessPopup();
-            }, 2500);
+                btn.innerHTML = originalText;
+                btn.style.background = 'linear-gradient(45deg, #87CEEB, #32CD32)';
+            }, 2000);
+        });
+    }
+
+    function redirectToCourse() {
+        navigator.clipboard.writeText(courseData.couponCode);
+        showSuccessPopup('Redirecting...', 'Applying your coupon code on Udemy.');
+        setTimeout(() => {
+            window.open(courseData.redirectUrl, '_blank');
+            hideSuccessPopup();
+        }, 2500);
+    }
+
+
+    // --- POPUP & UTILITY FUNCTIONS --- //
+    function showSuccessPopup(title, message, autoHide = true) {
+        const popupContent = document.getElementById('successPopupContent');
+        let icon = '⏳';
+
+        if (title.includes('Successful') || title.includes('Success')) icon = '✅';
+        else if (title.includes('Failed') || title.includes('Error')) icon = '❌';
+        else if (title.includes('Redirecting')) icon = '🚀';
+        else if (title.includes('Processing') || title.includes('Verifying') || title.includes('Creating')) icon = '💳';
+        else if (title.includes('Logging In')) icon = '🔑';
+
+
+        popupContent.innerHTML = `
+            <div class="success-icon" style="font-size: 3em; margin-bottom: 20px;">${icon}</div>
+            <h3>${title}</h3>
+            <p>${message}</p>
+        `;
+        document.getElementById('successPopup').style.display = 'flex';
+
+        if (autoHide) {
+            setTimeout(hideSuccessPopup, 2500);
         }
+    }
 
-        // --- POPUP & UTILITY FUNCTIONS (IMPROVED) --- //
-        function showSuccessPopup(title, message, autoHide = true) {
-            const popupContent = document.getElementById('successPopupContent');
-            let icon = '⏳'; // Default icon
+    function hideSuccessPopup() {
+        document.getElementById('successPopup').style.display = 'none';
+    }
 
-            // Set icon based on the title content
-            if (title.includes('Successful')) {
-                icon = '✅';
-            } else if (title.includes('Failed')) {
-                icon = '❌';
-            } else if (title.includes('Redirecting')) {
-                icon = '🚀';
-            } else if (title.includes('Processing')) {
-                icon = '💳';
-            }
-
-            popupContent.innerHTML = `
-                <div class="success-icon">${icon}</div>
-                <h3>${title}</h3>
-                <p>${message}</p>
-            `;
-            document.getElementById('successPopup').style.display = 'flex';
-
-            if (autoHide) {
-                setTimeout(hideSuccessPopup, 2000);
-            }
-        }
-        function hideSuccessPopup() {
-            document.getElementById('successPopup').style.display = 'none';
-        }
-    </script>
+</script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </body>
 </html>
