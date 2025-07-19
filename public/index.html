@@ -1,37 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unlock UpSkill - Get Premium Courses for Less</title>
+    <!-- The official Razorpay Checkout script -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <link rel="icon" type="image/png" href="../../favicon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
+        /* Your existing CSS styles are perfectly fine, no changes needed here. */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #87CEEB 0%, #32CD32 100%);
             min-height: 100vh;
             color: #333;
         }
+
         .container {
             max-width: 100%;
             margin: 0 auto;
             padding: 20px;
         }
+
         .header {
             text-align: center;
             margin-bottom: 30px;
             background: white;
             padding: 20px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
+
         .logo {
             font-size: 2.5em;
             font-weight: 700;
@@ -41,20 +49,23 @@
             background-clip: text;
             margin-bottom: 10px;
         }
+
         .tagline {
             font-size: 1.1em;
             color: #666;
             font-weight: 400;
         }
+
         .course-card {
             background: white;
             border-radius: 25px;
             padding: 30px;
             margin-bottom: 30px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
         }
+
         .course-card::before {
             content: '';
             position: absolute;
@@ -64,6 +75,7 @@
             height: 5px;
             background: linear-gradient(90deg, #87CEEB, #32CD32);
         }
+
         .course-title {
             font-size: 1.8em;
             font-weight: 600;
@@ -71,21 +83,15 @@
             margin-bottom: 15px;
             line-height: 1.3;
         }
-        .course-description {
-            font-size: 1em;
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
+
+        .course-description,
         .registration-description {
             font-size: 1em;
             color: #666;
             line-height: 1.6;
-            margin-top: 8px;
             margin-bottom: 25px;
-            position: relative;
-            overflow: hidden;
         }
+
         .price-section {
             display: flex;
             align-items: center;
@@ -95,27 +101,52 @@
             background: #f8f9fa;
             border-radius: 15px;
         }
+
         .original-price {
             font-size: 1.2em;
             text-decoration: line-through;
             color: #999;
         }
+
         .discounted-price {
             font-size: 1.8em;
             font-weight: 700;
             color: #32CD32;
         }
+
         .discount-badge {
             background: linear-gradient(45deg, #32CD32, #87CEEB);
             color: white;
             padding: 8px 15px;
-            border-radius: 25px;
-            font-size: 0.9em;
+            border-radius: 50px;
             font-weight: 600;
+            font-size: 0.9em;
         }
-        .enroll-btn {
+
+        .features-list {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .features-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+
+        .features-list li::before {
+            content: '✓';
+            color: #32CD32;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+
+        .cta-button {
+            display: block;
             width: 100%;
-            padding: 18px;
+            padding: 20px;
             background: linear-gradient(45deg, #87CEEB, #32CD32);
             color: white;
             border: none;
@@ -123,783 +154,437 @@
             font-size: 1.2em;
             font-weight: 600;
             cursor: pointer;
+            text-align: center;
+            text-decoration: none;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(135, 206, 235, 0.3);
+            box-shadow: 0 5px 15px rgba(50, 205, 50, 0.4);
         }
-        .enroll-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(135, 206, 235, 0.4);
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(50, 205, 50, 0.6);
         }
-        .auth-modal {
+
+        .auth-section {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            margin-top: 20px;
         }
-        .auth-container {
-            background: white;
-            border-radius: 25px;
-            padding: 40px 30px;
-            max-width: 400px;
-            width: 100%;
-            position: relative;
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #999;
-        }
-        .auth-title {
-            font-size: 1.8em;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 30px;
-            color: #333;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #555;
-        }
-        .form-group input {
-            width: 100%;
+
+        .auth-form input {
             padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
             font-size: 1em;
-            transition: border-color 0.3s ease;
         }
-        .form-group input:focus {
-            outline: none;
-            border-color: #87CEEB;
-        }
-        .password-warning {
-            font-size: 0.8em;
-            color: #888;
-            margin-top: 5px;
-        }
-        .password-container {
-            position: relative;
-        }
-        .password-toggle {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #666;
-        }
-        .auth-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(45deg, #87CEEB, #32CD32);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1em;
-            font-weight: 600;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        .auth-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        .auth-switch {
+
+        .auth-toggle {
             text-align: center;
-            color: #666;
+            margin-top: 15px;
         }
-        .auth-switch a {
-            color: #87CEEB;
+
+        .auth-toggle a {
+            color: #32CD32;
+            cursor: pointer;
             text-decoration: none;
             font-weight: 500;
         }
-        .payment-section {
-            background: white;
-            border-radius: 25px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-        }
-        .payment-title {
-            font-size: 1.6em;
-            font-weight: 600;
+
+        .user-info {
+            display: none;
             text-align: center;
             margin-bottom: 20px;
-            color: #333;
+            font-size: 1.1em;
         }
-        .payment-details {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 30px;
+
+        #logoutButton {
+            background: #ff4d4d;
+            margin-top: 10px;
         }
-        .payment-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        .payment-row.total {
-            font-weight: 600;
-            font-size: 1.2em;
-            color: #32CD32;
-            border-top: 2px solid #e0e0e0;
-            padding-top: 10px;
-        }
-        .payment-btn {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(45deg, #32CD32, #87CEEB);
-            color: white;
-            border: none;
-            border-radius: 15px;
-            font-size: 1.2em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .payment-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        .ad-overlay {
-            display: none;
+
+        /* Popup styles */
+        .popup-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-        .ad-container {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 350px;
-            width: 90%;
-            text-align: center;
-            position: relative;
-        }
-        .ad-timer {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            background: #32CD32;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.9em;
-            font-weight: 600;
-        }
-        .ad-content {
-            font-size: 1.1em;
-            margin-bottom: 20px;
-            color: #333;
-        }
-        .skip-btn {
-            background: #87CEEB;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 500;
-            opacity: 0.5;
-            pointer-events: none;
-        }
-        .skip-btn.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-        .coupon-section {
-            background: white;
-            border-radius: 25px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        .success-icon {
-            font-size: 3em;
-            color: #32CD32;
-            margin-bottom: 20px;
-        }
-        .coupon-code {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-            border: 2px dashed #87CEEB;
-        }
-        .coupon-text {
-            font-size: 1.8em;
-            font-weight: 700;
-            color: #333;
-            letter-spacing: 2px;
-        }
-        .copy-btn {
-            background: linear-gradient(45deg, #87CEEB, #32CD32);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 15px;
-            font-size: 1.1em;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 20px 0;
-            transition: all 0.3s ease;
-        }
-        .redirect-btn {
-            background: linear-gradient(45deg, #32CD32, #87CEEB);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 15px;
-            font-size: 1.2em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .success-popup {
+            background: rgba(0, 0, 0, 0.6);
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 3000;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            z-index: 1000;
         }
-        .success-content {
+
+        .popup-content {
             background: white;
-            border-radius: 25px;
             padding: 40px;
+            border-radius: 20px;
             text-align: center;
-            max-width: 350px;
-            width: 90%;
-        }
-        .hidden {
-            display: none !important;
-        }
-        .error-message {
-            color: #dc3545;
-            font-size: 0.9em;
-            margin-top: 5px;
-        }
-        @media (max-width: 480px) {
-            .container {
-                padding: 15px;
-            }
-            .logo {
-                font-size: 2em;
-            }
-            .course-card {
-                padding: 20px;
-            }
-            .course-title {
-                font-size: 1.5em;
-            }
-            .auth-container {
-                padding: 30px 20px;
-            }
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 90%;
+            width: 350px;
         }
     </style>
 </head>
+
 <body>
+
     <div class="container">
         <div class="header">
-            <div class="logo">Unlock UpSkill</div>
-            <div class="tagline">Premium courses at student-friendly prices</div>
+            <h1 class="logo">Unlock UpSkill</h1>
+            <p class="tagline">Get Lifetime Access to Premium Courses at Unbeatable Prices</p>
         </div>
 
-        <div class="course-card" id="courseSection">
-            <h2 class="course-title" id="courseTitle">Complete Web Development Bootcamp</h2>
-            <p class="course-description" id="courseDescription">
-                Master HTML, CSS, JavaScript, React, Node.js, and MongoDB. Build 10+ real-world projects and get job-ready with hands-on experience. Perfect for beginners and intermediate developers.
-            </p>
-            
+        <div class="course-card">
+            <div class="user-info" id="userInfo">
+                <p>Welcome, <span id="userName"></span>!</p>
+                <button id="logoutButton" class="cta-button">Logout</button>
+            </div>
+
+            <h2 class="course-title">The Complete 2024 Web Development Bootcamp</h2>
+            <p class="course-description">Become a Full-Stack Web Developer with just one course. HTML, CSS, Javascript,
+                Node, React, PostgreSQL, Web3 and DApps.</p>
+
             <div class="price-section">
                 <div>
-                    <div class="original-price">₹2,999</div>
-                    <div class="discounted-price">₹99</div>
+                    <span class="original-price">₹3,199</span>
+                    <span class="discounted-price">₹499</span>
                 </div>
-                <div class="discount-badge">97% OFF</div>
+                <span class="discount-badge">90% OFF</span>
             </div>
-            <p class="registration-description">
-                To enroll in course register yourself here!
-            </p>
-            <button class="enroll-btn" onclick="showAuthModal()">
-                🚀 Enroll Now - Get Instant Access
-            </button>
-        </div>
 
-        <div class="payment-section hidden" id="paymentSection">
-            <h3 class="payment-title">Complete Your Enrollment</h3>
-            <div class="payment-details">
-                <div class="payment-row">
-                    <span>Course Fee:</span>
-                    <span>₹99</span>
-                </div>
-                <div class="payment-row">
-                    <span>Processing Fee:</span>
-                    <span>₹1</span>
-                </div>
-                <div class="payment-row total">
-                    <span>Total:</span>
-                    <span>₹100</span>
-                </div>
-            </div>
-            <button class="payment-btn" onclick="processPayment()" id="paymentButton">
-                💳 Pay ₹100 & Get Course Access
-            </button>
-        </div>
+            <ul class="features-list">
+                <li>Lifetime Access to Course Materials</li>
+                <li>Access on Mobile and TV</li>
+                <li>Certificate of Completion</li>
+                <li>24/7 Support</li>
+            </ul>
 
-        <div class="coupon-section hidden" id="couponSection">
-            <div class="success-icon">🎉</div>
-            <h3>Payment Successful!</h3>
-            <p>Your exclusive coupon code is ready:</p>
-            
-            <div class="coupon-code">
-                <div class="coupon-text" id="couponCode">UPSKILL50</div>
-            </div>
-            
-            <button class="copy-btn" onclick="copyCoupon()">
-                📋 Copy Coupon Code
-            </button>
-            
-            <button class="redirect-btn" onclick="redirectToCourse()">
-                🎯 Apply Code on Udemy
-            </button>
-        </div>
-    </div>
+            <button id="paymentButton" class="cta-button">Unlock Course for ₹499</button>
 
-    <div class="auth-modal" id="authModal">
-        <div class="auth-container">
-            <button class="close-btn" onclick="hideAuthModal()">&times;</button>
-            
-            <div id="loginForm">
-                <h3 class="auth-title">Welcome Back!</h3>
-                <form onsubmit="handleLogin(event)">
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="loginEmail" required>
-                        <div class="error-message" id="loginEmailError"></div>
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <div class="password-container">
-                            <input type="password" id="loginPassword" required>
-                            <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">👁</button>
-                        </div>
-                        <div class="error-message" id="loginPasswordError"></div>
-                    </div>
-                    <button type="submit" class="auth-btn" id="loginBtn">Login</button>
+            <div class="auth-section" id="authSection">
+                <p class="registration-description">Please register or log in to complete your purchase.</p>
+                <form id="authForm" class="auth-form">
+                    <input type="text" id="name" name="name" placeholder="Full Name" required>
+                    <input type="email" id="email" name="email" placeholder="Email Address" required>
+                    <input type="password" id="password" name="password" placeholder="Password (min. 8 characters)"
+                        required>
+                    <button type="submit" class="cta-button" id="authSubmitButton">Sign Up & Pay</button>
                 </form>
-                <div class="auth-switch">
-                    Don't have an account? <a href="#" onclick="showSignup()">Sign up</a>
-                </div>
-            </div>
-
-            <div id="signupForm" class="hidden">
-                <h3 class="auth-title">Create Account</h3>
-                <form onsubmit="handleSignup(event)">
-                    <div class="form-group">
-                        <label>Full Name</label>
-                        <input type="text" id="signupName" required>
-                        <div class="error-message" id="signupNameError"></div>
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="signupEmail" required>
-                        <div class="error-message" id="signupEmailError"></div>
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <div class="password-container">
-                            <input type="password" id="signupPassword" required minlength="8" onkeyup="validatePassword()">
-                            <button type="button" class="password-toggle" onclick="togglePassword('signupPassword')">👁</button>
-                        </div>
-                        <p class="password-warning" id="passwordWarning"></p>
-                        <div class="error-message" id="signupPasswordError"></div>
-                    </div>
-                    <button type="submit" class="auth-btn" id="signupBtn">Create Account</button>
-                </form>
-                <div class="auth-switch">
-                    Already have an account? <a href="#" onclick="showLogin()">Login</a>
+                <div class="auth-toggle" id="authToggle">
+                    <p>Already have an account? <a id="showLogin">Log In</a></p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="ad-overlay" id="initialAdOverlay">
-        <div class="ad-container">
-            <button class="close-btn" onclick="closeInitialAd()">&times;</button>
-            <div class="ad-content">
-                <h3>👋 Welcome to Unlock UpSkill!</h3>
-                <p>Don't miss out on our limited-time offers. Your future starts now!</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="ad-overlay" id="postPaymentAdOverlay">
-        <div class="ad-container">
-            <div class="ad-timer" id="postPaymentAdTimer">20</div>
-            <div class="ad-content">
-                <h3>🎯 Special Offer!</h3>
-                <p>Get access to 100+ premium courses with our annual subscription. Limited time offer!</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="success-popup" id="successPopup">
-        <div class="success-content" id="successPopupContent">
+    <!-- Success/Error Popup -->
+    <div class="popup-overlay" id="successPopup">
+        <div class="popup-content" id="successPopupContent">
+            <!-- Content will be injected by JavaScript -->
         </div>
     </div>
 
     <script>
-    // --- CONFIG & DATA STORE --- //
-    const API_URL = ''; // An empty string makes requests to the same origin
-    const RAZORPAY_KEY_ID = 'rzp_live_nrMCL3W2tjJYqj'; // Replace with your actual PUBLIC Razorpay Key ID
+        // --- DOM Elements ---
+        const paymentButton = document.getElementById('paymentButton');
+        const authSection = document.getElementById('authSection');
+        const userInfo = document.getElementById('userInfo');
+        const userNameSpan = document.getElementById('userName');
+        const logoutButton = document.getElementById('logoutButton');
+        const authForm = document.getElementById('authForm');
+        const authToggle = document.getElementById('authToggle');
+        const showLoginLink = document.getElementById('showLogin');
+        const nameInput = document.getElementById('name');
+        const authSubmitButton = document.getElementById('authSubmitButton');
 
-    let state = {
-        token: localStorage.getItem('token') || null,
-        user: null,
-        razorpayOrderId: null,
-    };
+        // --- State Variables ---
+        let currentUser = null;
+        let isLoginMode = false;
+        let razorpayKey = null;
 
-    // Course data
-    const courseData = {
-        title: "Complete Web Development Bootcamp",
-        description: "Master HTML, CSS, JavaScript, React, Node.js, and MongoDB...",
-        couponCode: "UPSKILL50",
-        redirectUrl: "https://www.udemy.com/course/the-complete-web-development-bootcamp/",
-        amount: 100 // Total amount in INR
-    };
+        // --- Functions ---
 
-    // --- INITIALIZATION --- //
-    document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('initialAdOverlay').style.display = 'flex';
-        if (state.token) {
-            // If user has a token, you might want to verify it or directly show the payment section
-            // For simplicity, we'll just keep them "logged in" on the frontend
-            console.log("User has a token, ready to proceed.");
-        }
-    });
-
-    // --- ADVERTISEMENT LOGIC --- //
-    function closeInitialAd() {
-        document.getElementById('initialAdOverlay').style.display = 'none';
-    }
-
-    function showPostPaymentAd() {
-        document.getElementById('postPaymentAdOverlay').style.display = 'flex';
-        let timeLeft = 20;
-        const timerEl = document.getElementById('postPaymentAdTimer');
-        timerEl.textContent = timeLeft;
-
-        const timer = setInterval(() => {
-            timeLeft--;
-            timerEl.textContent = timeLeft;
-            if (timeLeft <= 0) {
-                clearInterval(timer);
-                document.getElementById('postPaymentAdOverlay').style.display = 'none';
-                showCouponSection();
+        /**
+         * Checks for a token in localStorage on page load to maintain login state.
+         */
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                await fetchUserInfo(token);
             }
-        }, 1000);
-    }
+            // Fetch Razorpay key as soon as the page loads
+            fetchRazorpayKey();
 
-    // --- AUTHENTICATION & USER FLOW --- //
-    function showAuthModal() {
-        document.getElementById('authModal').style.display = 'flex';
-    }
+            // Add event listeners
+            paymentButton.addEventListener('click', handlePayment);
+            logoutButton.addEventListener('click', handleLogout);
+            authForm.addEventListener('submit', handleAuthSubmit);
+            showLoginLink.addEventListener('click', toggleAuthMode);
+        });
 
-    function hideAuthModal() {
-        document.getElementById('authModal').style.display = 'none';
-    }
-
-    function showLogin() {
-        document.getElementById('loginForm').classList.remove('hidden');
-        document.getElementById('signupForm').classList.add('hidden');
-    }
-
-    function showSignup() {
-        document.getElementById('signupForm').classList.remove('hidden');
-        document.getElementById('loginForm').classList.add('hidden');
-    }
-
-    function togglePassword(inputId) {
-        const input = document.getElementById(inputId);
-        const button = input.nextElementSibling;
-        input.type = input.type === 'password' ? 'text' : 'password';
-        button.textContent = input.type === 'password' ? '👁' : '🙈';
-    }
-
-    function validatePassword() {
-        const password = document.getElementById('signupPassword').value;
-        const warning = document.getElementById('passwordWarning');
-        warning.textContent = password.length < 8 ? 'Password must be at least 8 characters.' : '';
-    }
-
-    // --- REVISED LOGIN FUNCTION (with fetch) --- //
-    async function handleLogin(event) {
-        event.preventDefault();
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-
-        showSuccessPopup('Logging In...', '', false);
-
-        try {
-            const response = await fetch(`${API_URL}/api/auth/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
-
-            const result = await response.json();
-
-            if (!response.ok) {
-                throw new Error(result.message || 'Login failed.');
+        /**
+         * Fetches the Razorpay Key ID from the backend.
+         */
+        async function fetchRazorpayKey() {
+            try {
+                const response = await fetch('/api/payments/get-key');
+                const data = await response.json();
+                if (data.success) {
+                    razorpayKey = data.key;
+                } else {
+                    console.error('Could not fetch Razorpay key.');
+                }
+            } catch (error) {
+                console.error('Error fetching Razorpay key:', error);
             }
-
-            // Success
-            state.token = result.data.token;
-            state.user = result.data.user;
-            localStorage.setItem('token', state.token);
-
-            hideAuthModal();
-            showSuccessPopup('Login Successful!', 'Redirecting to payment...');
-            setTimeout(() => {
-                hideSuccessPopup();
-                showPaymentSection();
-            }, 2000);
-
-        } catch (error) {
-            showSuccessPopup('Login Failed', error.message);
-        }
-    }
-
-    // --- REVISED SIGNUP FUNCTION (with fetch) --- //
-    async function handleSignup(event) {
-        event.preventDefault();
-        const name = document.getElementById('signupName').value;
-        const email = document.getElementById('signupEmail').value;
-        const password = document.getElementById('signupPassword').value;
-
-        if (password.length < 8) {
-            validatePassword();
-            return;
         }
 
-        showSuccessPopup('Creating Account...', '', false);
+        /**
+         * Fetches user info from the backend using a token.
+         * @param {string} token - The JWT authentication token.
+         */
+        async function fetchUserInfo(token) {
+            try {
+                const response = await fetch('/api/auth/me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) throw new Error('Session expired or invalid.');
 
-        try {
-            const response = await fetch(`${API_URL}/api/auth/signup`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, password })
-            });
-
-            const result = await response.json();
-
-            if (!response.ok) {
-                throw new Error(result.message || 'Signup failed.');
+                const result = await response.json();
+                if (result.success) {
+                    currentUser = result.data.user;
+                    updateUIForLoggedInUser();
+                } else {
+                    handleLogout();
+                }
+            } catch (error) {
+                console.error('Failed to fetch user info:', error);
+                handleLogout();
             }
-
-            // Success
-            state.token = result.data.token;
-            state.user = result.data.user;
-            localStorage.setItem('token', state.token);
-
-            hideAuthModal();
-            showSuccessPopup('Signup Successful!', 'Redirecting to payment...');
-            setTimeout(() => {
-                hideSuccessPopup();
-                showPaymentSection();
-            }, 2000);
-
-        } catch (error) {
-            showSuccessPopup('Registration Failed', error.message);
-        }
-    }
-
-
-    // --- PAYMENT & COUPON FLOW --- //
-    function showPaymentSection() {
-        document.getElementById('courseSection').classList.add('hidden');
-        document.getElementById('paymentSection').classList.remove('hidden');
-    }
-
-    async function processPayment() {
-        if (!state.token) {
-            showSuccessPopup('Error', 'You must be logged in to pay.');
-            showAuthModal();
-            return;
         }
 
-        showSuccessPopup('Creating Order...', '', false);
-
-        try {
-            // 1. Create an order on your backend
-            const orderResponse = await fetch(`${API_URL}/api/payments/create-order`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${state.token}`
-                },
-                body: JSON.stringify({ amount: courseData.amount })
-            });
-
-            const orderResult = await orderResponse.json();
-
-            if (!orderResponse.ok) {
-                throw new Error(orderResult.message || 'Failed to create order.');
+        /**
+         * Main handler for the payment button click.
+         */
+        function handlePayment() {
+            if (currentUser) {
+                // If user is logged in, proceed to payment
+                initiatePayment();
+            } else {
+                // If not logged in, show the authentication form
+                authSection.style.display = 'block';
+                paymentButton.style.display = 'none';
             }
-            
-            state.razorpayOrderId = orderResult.data.order.id;
-            hideSuccessPopup();
+        }
 
-            // 2. Open Razorpay Checkout
+        /**
+         * Handles form submission for both login and signup.
+         * @param {Event} e - The form submission event.
+         */
+        async function handleAuthSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const name = nameInput.value;
+            const endpoint = isLoginMode ? '/api/auth/login' : '/api/auth/signup';
+
+            const body = isLoginMode ? { email, password } : { name, email, password };
+
+            showSuccessPopup('Processing...', isLoginMode ? 'Logging you in...' : 'Creating your account...', false);
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(result.message || 'Authentication failed.');
+                }
+
+                // On successful auth, store token and user, then proceed to payment
+                localStorage.setItem('authToken', result.data.token);
+                currentUser = result.data.user;
+                updateUIForLoggedInUser();
+                initiatePayment();
+
+            } catch (error) {
+                console.error('Auth error:', error);
+                showSuccessPopup('Authentication Failed', error.message, false);
+                setTimeout(hideSuccessPopup, 3000);
+            }
+        }
+
+        /**
+         * Initiates the payment flow by creating an order on the backend.
+         */
+        async function initiatePayment() {
+            if (!razorpayKey) {
+                showSuccessPopup('Error', 'Payment service is currently unavailable. Please try again later.', false);
+                return;
+            }
+            showSuccessPopup('Processing...', 'Creating secure payment order...', false);
+            const amount = 499; // Amount in INR
+            const token = localStorage.getItem('authToken');
+
+            try {
+                const response = await fetch('/api/payments/create-order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ amount })
+                });
+
+                const result = await response.json();
+                if (!response.ok || !result.success) {
+                    throw new Error(result.message || 'Could not create order.');
+                }
+
+                // Use the order details to open Razorpay checkout
+                const { order } = result.data;
+                openRazorpayCheckout(order, amount);
+
+            } catch (error) {
+                console.error('Error creating order:', error);
+                showSuccessPopup('Payment Failed', error.message, false);
+                setTimeout(hideSuccessPopup, 3000);
+            }
+        }
+
+        /**
+         * Opens the Razorpay payment modal.
+         * @param {object} order - The order object from Razorpay.
+         * @param {number} amount - The payment amount.
+         */
+        function openRazorpayCheckout(order, amount) {
             const options = {
-                key: RAZORPAY_KEY_ID,
-                amount: orderResult.data.order.amount,
+                key: razorpayKey,
+                amount: order.amount,
                 currency: "INR",
                 name: "Unlock UpSkill",
-                description: "Course Enrollment",
-                order_id: state.razorpayOrderId,
+                description: "Web Development Bootcamp Course",
+                order_id: order.id,
                 handler: async function (response) {
-                    // 3. Verify the payment on your backend
+                    // This function is called after a successful payment
                     await verifyPayment(response);
                 },
                 prefill: {
-                    name: state.user.name,
-                    email: state.user.email,
+                    name: currentUser.name,
+                    email: currentUser.email,
                 },
                 theme: {
                     color: "#32CD32"
                 }
             };
-
+            hideSuccessPopup();
             const rzp = new Razorpay(options);
             rzp.open();
-
-        } catch (error) {
-            showSuccessPopup('Payment Error', error.message);
         }
-    }
 
-    async function verifyPayment(paymentResponse) {
-        showSuccessPopup('Verifying Payment...', '', false);
-        try {
-            const response = await fetch(`${API_URL}/api/payments/verify`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${state.token}`
-                },
-                body: JSON.stringify({
-                    razorpay_order_id: paymentResponse.razorpay_order_id,
-                    razorpay_payment_id: paymentResponse.razorpay_payment_id,
-                    razorpay_signature: paymentResponse.razorpay_signature
-                })
-            });
+        /**
+         * Sends payment details to the backend for verification.
+         * @param {object} paymentResponse - The response from Razorpay after payment.
+         */
+        async function verifyPayment(paymentResponse) {
+            showSuccessPopup('Verifying...', 'Finalizing your payment...', false);
+            const token = localStorage.getItem('authToken');
+            try {
+                const response = await fetch('/api/payments/verify-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(paymentResponse)
+                });
 
-            const result = await response.json();
+                const result = await response.json();
+                if (!response.ok || !result.success) {
+                    throw new Error(result.message || 'Verification failed.');
+                }
 
-            if (!response.ok) {
-                throw new Error(result.message || 'Verification failed.');
+                // Payment is successful and verified
+                showSuccessPopup('Payment Successful!', 'You now have lifetime access.', false);
+                setTimeout(() => redirectToCourse(result.data), 2000);
+
+            } catch (error) {
+                console.error('Error verifying payment:', error);
+                showSuccessPopup('Verification Failed', error.message, false);
             }
-
-            // Success
-            hideSuccessPopup();
-            showPostPaymentAd();
-
-        } catch (error) {
-            showSuccessPopup('Verification Failed', error.message);
         }
-    }
 
+        // --- UI Update and Utility Functions ---
 
-    function showCouponSection() {
-        document.getElementById('paymentSection').classList.add('hidden');
-        document.getElementById('couponSection').classList.remove('hidden');
-    }
+        function updateUIForLoggedInUser() {
+            userNameSpan.textContent = currentUser.name;
+            userInfo.style.display = 'block';
+            authSection.style.display = 'none';
+            paymentButton.style.display = 'block';
+        }
 
-    function copyCoupon() {
-        navigator.clipboard.writeText(courseData.couponCode).then(() => {
-            const btn = event.target;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '✅ Copied!';
-            btn.style.background = '#32CD32';
+        function handleLogout() {
+            localStorage.removeItem('authToken');
+            currentUser = null;
+            userInfo.style.display = 'none';
+            paymentButton.style.display = 'block';
+            // Don't show auth section unless payment button is clicked again
+            authSection.style.display = 'none';
+        }
 
+        function toggleAuthMode(e) {
+            e.preventDefault();
+            isLoginMode = !isLoginMode;
+            nameInput.style.display = isLoginMode ? 'none' : 'block';
+            nameInput.required = !isLoginMode;
+            authSubmitButton.textContent = isLoginMode ? 'Log In & Pay' : 'Sign Up & Pay';
+            authToggle.innerHTML = isLoginMode
+                ? `Don't have an account? <a id="showSignup">Sign Up</a>`
+                : `Already have an account? <a id="showLogin">Log In</a>`;
+
+            // Re-add event listeners to the new links
+            if (isLoginMode) {
+                document.getElementById('showSignup').addEventListener('click', toggleAuthMode);
+            } else {
+                document.getElementById('showLogin').addEventListener('click', toggleAuthMode);
+            }
+        }
+
+        function redirectToCourse(courseData) {
+            showSuccessPopup('Redirecting...', 'Taking you to the course page...', false);
             setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.style.background = 'linear-gradient(45deg, #87CEEB, #32CD32)';
-            }, 2000);
-        });
-    }
-
-    function redirectToCourse() {
-        navigator.clipboard.writeText(courseData.couponCode);
-        showSuccessPopup('Redirecting...', 'Applying your coupon code on Udemy.');
-        setTimeout(() => {
-            window.open(courseData.redirectUrl, '_blank');
-            hideSuccessPopup();
-        }, 2500);
-    }
-
-
-    // --- POPUP & UTILITY FUNCTIONS --- //
-    function showSuccessPopup(title, message, autoHide = true) {
-        const popupContent = document.getElementById('successPopupContent');
-        let icon = '⏳';
-
-        if (title.includes('Successful') || title.includes('Success')) icon = '✅';
-        else if (title.includes('Failed') || title.includes('Error')) icon = '❌';
-        else if (title.includes('Redirecting')) icon = '🚀';
-        else if (title.includes('Processing') || title.includes('Verifying') || title.includes('Creating')) icon = '💳';
-        else if (title.includes('Logging In')) icon = '🔑';
-
-
-        popupContent.innerHTML = `
-            <div class="success-icon" style="font-size: 3em; margin-bottom: 20px;">${icon}</div>
-            <h3>${title}</h3>
-            <p>${message}</p>
-        `;
-        document.getElementById('successPopup').style.display = 'flex';
-
-        if (autoHide) {
-            setTimeout(hideSuccessPopup, 2500);
+                window.open(courseData.redirectUrl, '_blank');
+                hideSuccessPopup();
+            }, 2500);
         }
-    }
 
-    function hideSuccessPopup() {
-        document.getElementById('successPopup').style.display = 'none';
-    }
+        function showSuccessPopup(title, message, autoHide = true) {
+            const popupContent = document.getElementById('successPopupContent');
+            let icon = '⏳';
+            if (title.includes('Successful')) icon = '✅';
+            else if (title.includes('Failed') || title.includes('Error')) icon = '❌';
+            else if (title.includes('Redirecting')) icon = '🚀';
+            popupContent.innerHTML = `<div style="font-size: 3em; margin-bottom: 20px;">${icon}</div><h3>${title}</h3><p>${message}</p>`;
+            document.getElementById('successPopup').style.display = 'flex';
+            if (autoHide) {
+                setTimeout(hideSuccessPopup, 3000);
+            }
+        }
 
-</script>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        function hideSuccessPopup() {
+            document.getElementById('successPopup').style.display = 'none';
+        }
+    </script>
 </body>
+
 </html>
