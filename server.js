@@ -12,7 +12,6 @@ const path = require("path")
 dotenv.config()
 
 // Initialize Neon PostgreSQL connection immediately and synchronously
-// This ensures 'sql' is a function when other modules require it
 let sql
 try {
   if (!process.env.DATABASE_URL) {
@@ -35,8 +34,13 @@ try {
       key_secret: process.env.RAZORPAY_KEY_SECRET,
     })
     console.log("✅ Razorpay initialized successfully")
+    // Added logging to confirm environment variables are loaded
+    console.log(`   Razorpay Key ID loaded: ${process.env.RAZORPAY_KEY_ID ? "Yes" : "No"}`)
+    console.log(`   Razorpay Key Secret loaded: ${process.env.RAZORPAY_KEY_SECRET ? "Yes (masked)" : "No"}`)
   } else {
     console.log("⚠️ Razorpay credentials not found - payment features will be disabled")
+    console.log(`   RAZORPAY_KEY_ID value: ${process.env.RAZORPAY_KEY_ID}`)
+    console.log(`   RAZORPAY_KEY_SECRET value: ${process.env.RAZORPAY_KEY_SECRET ? "***" : "Not set"}`)
   }
 } catch (error) {
   console.error("❌ Razorpay initialization failed:", error.message)
