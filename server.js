@@ -93,12 +93,18 @@ app.get("/api/health", async (req, res) => {
   }
 })
 
-// Import and use modularized routes
-const authRoutes = require("./routes/auth")
-const paymentRoutes = require("./routes/payment")
+// Import and use modularized routes, passing sql and razorpayInstance
+// The route files will now export a function that takes these as arguments
+const createAuthRoutes = require("./routes/auth")
+const createPaymentRoutes = require("./routes/payment")
+const { authenticateToken: createAuthenticateToken } = require("./middleware/auth")
 
-app.use("/api/auth", authRoutes)
-app.use("/api/payments", paymentRoutes)
+// Pass sql to the middleware creator
+const authenticateToken = createAuthenticateToken(sql)
+
+// Pass sql and razorpayInstance to the route creators
+app.use("/api/auth", createAuthRoutes(sql, authenticateToken))
+app.use("/api/payments", createPaymentRoutes(sql, razorpayInstance, authenticateToken))
 
 // This catch-all route should be AFTER all your API routes
 // It serves the frontend application for any route not handled by the API
@@ -150,6 +156,7 @@ async function startServer() {
 
 startServer()
 
-// Export for use in other files
-// Ensure sql and razorpayInstance are exported after they are fully initialized
-module.exports = { sql, razorpay: razorpayInstance }
+// We no longer need to export sql and razorpayInstance here
+// as they are passed directly to the modules that need them.
+// If other parts of your application need them, they should also be refactored
+// to accept them as arguments or be initialized in a similar way.
