@@ -34,7 +34,6 @@ try {
       key_secret: process.env.RAZORPAY_KEY_SECRET,
     })
     console.log("✅ Razorpay initialized successfully")
-    // Added logging to confirm environment variables are loaded
     console.log(`   Razorpay Key ID loaded: ${process.env.RAZORPAY_KEY_ID ? "Yes" : "No"}`)
     console.log(`   Razorpay Key Secret loaded: ${process.env.RAZORPAY_KEY_SECRET ? "Yes (masked)" : "No"}`)
   } else {
