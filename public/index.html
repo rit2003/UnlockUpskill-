@@ -502,25 +502,11 @@
         <div class="course-card" id="courseSection">
             <h2 class="course-title" id="courseTitle">Python for Data Science with Assignments</h2>
             <p class="course-description" id="courseDescription">
-                A Comprehensive and Practical Hands-On Guide to Learning Python for Beginners, Aspiring Developers,
-                Self-Learners, etc.<br>
-                🔥 Master Python – The Language Behind AI & Automation
-                Learn the most in-demand language powering Google, Netflix, and ChatGPT—no prior coding needed!<br>
-
-                📊 Turn Raw Data into Gold with Real Statistical Analysis
-                Discover how to uncover insights, predict trends, and make data-driven decisions using powerful Python
-                tools.<br>
-
-                🧠 Think Like a Data Scientist with Real-World Projects
-                From analyzing customer behavior to predicting outcomes using Bayes' Theorem, you’ll solve real problems
-                hands-on.<br>
-
-                ⚙️ From Beginner to Pro: Build Smart, Scalable Python Code
-                Learn to write clean, efficient programs with loops, functions, OOP, and data structures—skills top tech
-                companies want.<br>
-
-                🎯 Crack Business Decisions with Hypothesis Testing & Visualization
-                Learn t-tests, ANOVA, and more to back every idea with stats—and visualize it like a pro using Python.
+                A Comprehensive and Practical Hands-On Guide to Learning Python for Beginners, Aspiring Developers, Self-Learners, etc.<br>
+                🚀 Learn Python from Scratch – No experience needed! Start coding and automate real-world tasks.<br>
+                📊 Analyze Data Like a Pro – Use Python to explore, visualize, and draw insights from data.<br>
+                🧠 Master Key Statistics & Probability – Understand data deeply with real examples and smart techniques.<br>
+                🎯 Build Real Projects – Apply your skills with hands-on projects in analysis, prediction, and decision-making.
             </p>
 
             <div class="price-section">
@@ -673,7 +659,7 @@
             user: null,
             razorpayOrderId: null,
         };
-// --------------------------------change----------------------------------------
+        // --------------------------------change----------------------------------------
         // Course data
         const courseData = {
             title: "Python for Data Science with Assignments",
@@ -744,7 +730,7 @@
             warning.textContent = password.length < 8 ? 'Password must be at least 8 characters.' : '';
         }
 
-        // --- REVISED LOGIN FUNCTION (with fetch) --- //
+        // --- REVISED LOGIN FUNCTION (with fetch) --- 
         async function handleLogin(event) {
             event.preventDefault();
             const email = document.getElementById('loginEmail').value;
@@ -827,7 +813,7 @@
         }
 
 
-        // --- PAYMENT & COUPON FLOW --- //
+    //     // --- PAYMENT & COUPON FLOW --- //
         function showPaymentSection() {
             document.getElementById('courseSection').classList.add('hidden');
             document.getElementById('paymentSection').classList.remove('hidden');
@@ -884,7 +870,7 @@
                 };
 
                 const rzp = new Razorpay(options);
-                rzp.open();
+                // rzp.open();
 
             } catch (error) {
                 showSuccessPopup('Payment Error', error.message);
